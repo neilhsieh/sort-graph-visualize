@@ -1,9 +1,11 @@
 import React from "react";
+import GraphDisplay from "./components/graphDisplay";
 import "./App.scss";
 
 function App() {
   return (
     <div className="App">
+      <GraphDisplay />
       {/* <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
