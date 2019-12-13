@@ -1,8 +1,17 @@
-@import "../components/graphDisplay.scss";
+// @import "./alignment.scss";
 
-// .App {
-//   text-align: center;
-// }
+.app {
+  font-size: 1.6rem;
+}
+
+/* ---------- Page Alignment ---------- */
+body {
+  #graph-container,
+  .sort-visualizer-header,
+  #user-input {
+    margin: 0px 10px;
+  }
+}
 
 // .App-logo {
 //   height: 40vmin;
