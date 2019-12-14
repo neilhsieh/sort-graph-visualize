@@ -8,6 +8,7 @@ class GraphDisplay extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      didSetState: false,
       barNumArray: [],
       numOfBars: 0,
       bar1ToMove: 0,
@@ -16,7 +17,8 @@ class GraphDisplay extends React.Component {
     // this.listOfRandomizeArray = this.listOfRandomizeArray.bind(this);
     this.displayNum = this.displayNum.bind(this);
     this.calculateNumOfBars = this.calculateNumOfBars.bind(this);
-    // this.moveBars = this.moveBars.bind(this);
+    this.moveBars = this.moveBars.bind(this);
+    this.tempFunction = this.tempFunction.bind(this);
   }
 
   componentDidMount() {
@@ -27,7 +29,8 @@ class GraphDisplay extends React.Component {
   componentDidUpdate(prevProps) {
     if (this.props.numOfBars !== prevProps.numOfBars) {
       this.setState({
-        numOfBars: this.props.numOfBars
+        numOfBars: this.props.numOfBars,
+        didSetState: true
       });
       this.calculateNumOfBars(this.props.numOfBars);
     }
@@ -42,16 +45,19 @@ class GraphDisplay extends React.Component {
     // const selectedNumOfBars = this.state.numOfBars;
     const barHeightDiff = Math.round(100 / selectedNumOfBars);
     let tempNumArray = [];
-    for (let i = barHeightDiff; i <= 100; i += barHeightDiff) {
+    for (let i = 100; i >= barHeightDiff; i -= barHeightDiff) {
       tempNumArray.push(i);
     }
-    this.setState({ barNumArray: tempNumArray });
+    this.setState({ barNumArray: tempNumArray }, () => {
+      this.tempFunction();
+    });
   }
 
   updateBars() {
     const selectedNumOfBars = this.state.numOfBars;
     const graph = document.querySelector("#graph-container .bar-graph-display");
     if (graph && selectedNumOfBars !== 0) {
+      // if (this.state.didSetState) {
       graph.style.gridTemplateColumns = `repeat(${selectedNumOfBars}, 1fr [bar-height-row])`;
       return this.state.barNumArray.map((bar, i) => {
         return <SingleBar barLength={bar} barNum={bar} key={i} />;
@@ -59,17 +65,38 @@ class GraphDisplay extends React.Component {
     }
   }
 
-  // moveBars() {
-  //   return <MoveBars bar1={} bar2={} />;
-  // }
+  tempFunction() {
+    const temp = this.state.barNumArray[0];
+    let nextBarsArray = this.state.barNumArray;
+    const bar1 = this.state.barNumArray[0];
+    const bar2 = nextBarsArray[nextBarsArray.length - 1];
+    nextBarsArray[0] = nextBarsArray[nextBarsArray.length - 1];
+    nextBarsArray[nextBarsArray.length - 1] = temp;
+
+    this.moveBars(bar1, bar2);
+  }
+
+  // Function should take two input bar points to swap places
+  moveBars(bar1, bar2) {
+    const barContainerLeft = document.querySelector(".bar-graph-display")
+      .offsetLeft;
+    const bar1Elem = document.querySelector(`.bar-graph-display .bar-${bar1}`);
+    const bar2Elem = document.querySelector(`.bar-graph-display .bar-${bar2}`);
+
+    const oldBar1Left = bar1Elem.offsetLeft - barContainerLeft;
+    const oldBar2Left = bar2Elem.offsetLeft - barContainerLeft;
+
+    const newBar1Left = oldBar2Left - oldBar1Left;
+    const newBar2Left = oldBar1Left - oldBar2Left;
+
+    // bar1Elem.left(newBar1Left);
+    console.log(newBar1Left, newBar2Left);
+    bar1Elem.style.left = `${newBar1Left}px`;
+    bar2Elem.style.left = `${newBar2Left}px`;
+  }
 
   render() {
-    return (
-      <div className="bar-graph-display">
-        {this.updateBars()}
-        {/* {this.moveBars()} */}
-      </div>
-    );
+    return <div className="bar-graph-display">{this.updateBars()}</div>;
   }
 }
 

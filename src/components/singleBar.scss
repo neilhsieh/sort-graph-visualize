@@ -1,5 +1,6 @@
 .bar-graph-display {
   [class^="bar-"] {
+    position: relative;
     background-color: #9dbad5;
     opacity: 0.6;
     box-sizing: border-box;
