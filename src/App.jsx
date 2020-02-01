@@ -14,9 +14,7 @@ class App extends React.Component {
   }
 
   chosenNumOfBars(e) {
-    // console.log(e.target.value);
-    // console.log(e.target.value, typeof e.target.value);
-    this.setState({ numOfBars: parseInt(e.target.value) });
+    this.setState({ numOfBars: e });
   }
 
   render() {

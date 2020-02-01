@@ -10,5 +10,10 @@
     grid-row-start: 1;
     grid-gap: 2px;
     text-align: center;
+    left: 0;
+    transition: left 200ms ease-out;
+  }
+  [class*="bar-moving"] {
+    background-color: red;
   }
 }

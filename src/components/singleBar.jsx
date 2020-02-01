@@ -8,7 +8,10 @@ const SingleBar = props => {
   const classNames = `bar-${props.barNum}`;
   const gridRowEndValue = props.barLength === 101 ? 1 : 101 - props.barLength;
   return (
-    <div className={classNames} style={{ gridRowStart: gridRowEndValue }}>
+    <div
+      className={classNames}
+      style={{ gridRowStart: gridRowEndValue, left: "unset", right: "unset" }}
+    >
       {/* {props.barLength} */}
     </div>
   );

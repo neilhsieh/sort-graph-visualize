@@ -73,7 +73,7 @@ class GraphDisplay extends React.Component {
     nextBarsArray[0] = nextBarsArray[nextBarsArray.length - 1];
     nextBarsArray[nextBarsArray.length - 1] = temp;
 
-    this.moveBars(bar1, bar2);
+    // this.moveBars(bar1, bar2);
   }
 
   // Function should take two input bar points to swap places
@@ -89,10 +89,27 @@ class GraphDisplay extends React.Component {
     const newBar1Left = oldBar2Left - oldBar1Left;
     const newBar2Left = oldBar1Left - oldBar2Left;
 
-    // bar1Elem.left(newBar1Left);
-    console.log(newBar1Left, newBar2Left);
-    bar1Elem.style.left = `${newBar1Left}px`;
-    bar2Elem.style.left = `${newBar2Left}px`;
+    bar1Elem.classList.add(`bar-moving-${bar1}`);
+    document.querySelector(
+      `.bar-moving-${bar1}`
+    ).style.left = `${newBar1Left}px`;
+
+    bar2Elem.classList.add(`bar-moving-${bar2}`);
+    document.querySelector(
+      `.bar-moving-${bar2}`
+    ).style.left = `${newBar2Left}px`;
+
+    bar1Elem.addEventListener(
+      "transitionend",
+      () => {
+        bar1Elem.style.left = `${newBar1Left}px`;
+        bar2Elem.style.left = `${newBar2Left}px`;
+
+        bar1Elem.classList.remove(`bar-moving-${bar1}`);
+        bar2Elem.classList.remove(`bar-moving-${bar2}`);
+      },
+      false
+    );
   }
 
   render() {
