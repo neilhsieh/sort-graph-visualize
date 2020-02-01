@@ -1,0 +1,19 @@
+.bar-graph-display {
+  [class^="bar-"] {
+    position: relative;
+    background-color: #9dbad5;
+    opacity: 0.6;
+    box-sizing: border-box;
+    justify-self: center;
+    width: 100%;
+    grid-row-end: last-line;
+    grid-row-start: 1;
+    grid-gap: 2px;
+    text-align: center;
+    left: 0;
+    transition: left 200ms ease-out;
+  }
+  [class*="bar-moving"] {
+    background-color: red;
+  }
+}
