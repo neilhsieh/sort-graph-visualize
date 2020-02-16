@@ -96,41 +96,34 @@ class GraphDisplay extends React.Component {
 
     let totalBars = this.state.barNumArray.length - 1;
     let counter = 0;
-    let count = Math.floor(totalBars / 2);
-    const temp = this.state.barNumArray[0];
+    let count = Math.floor(this.state.barNumArray.length / 2);
+    const numOfMoves = count;
     let nextBarsArray = this.state.barNumArray;
     // let bar1 = this.state.barNumArray[0];
     // let bar2 = nextBarsArray[nextBarsArray.length - 1];
     // nextBarsArray[0] = nextBarsArray[nextBarsArray.length - 1];
     // nextBarsArray[nextBarsArray.length - 1] = temp;
     const checkNextMove = () => {
-      while (count) {
-        count -= 1;
-        // let bar1 = this.state.barNumArray[0];
-        // let bar2 = nextBarsArray[nextBarsArray.length - 1];
-        let bar1 = this.state.barNumArray[counter];
-        let bar2 = nextBarsArray[totalBars];
-
-        counter += 1;
-        totalBars -= 1;
-        console.log(counter, totalBars);
-        // console.log(bar1, bar2);
-        // moveBars(bar1, bar2);
-        return { bar1, bar2 };
-      }
+      count -= 1;
+      // let bar1 = this.state.barNumArray[0];
+      // let bar2 = nextBarsArray[nextBarsArray.length - 1];
+      let bar1 = this.state.barNumArray[counter];
+      let bar2 = nextBarsArray[totalBars];
+      console.log(bar1, bar2);
+      counter += 1;
+      totalBars -= 1;
+      return { bar1, bar2 };
     };
-    // const p1 = new Promise((res, rej) => {
     const waitMoveBars = async () => {
-      let i = 5;
+      let i = numOfMoves;
+
       while (i > 0) {
         const { bar1, bar2 } = checkNextMove();
-
         const isDone = await moveBars(bar1, bar2);
         i -= 1;
       }
-      const { bar1, bar2 } = checkNextMove();
-      const isDone = await moveBars(bar1, bar2);
-      // const awaiting = await moveBars();
+      // const { bar1, bar2 } = checkNextMove();
+      // const isDone = await moveBars(bar1, bar2);
     };
 
     waitMoveBars();
