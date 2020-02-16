@@ -3,6 +3,15 @@ import PropTypes from "prop-types";
 import SingleBar from "./singleBar.jsx";
 import MoveBars from "./moveBars.jsx";
 import "./graphDisplay.scss";
+import moveBars from "./moveBars.js";
+
+function resolveAfter2Seconds() {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve("resolved");
+    }, 2000);
+  });
+}
 
 class GraphDisplay extends React.Component {
   constructor(props) {
@@ -17,13 +26,15 @@ class GraphDisplay extends React.Component {
     // this.listOfRandomizeArray = this.listOfRandomizeArray.bind(this);
     this.displayNum = this.displayNum.bind(this);
     this.calculateNumOfBars = this.calculateNumOfBars.bind(this);
-    this.moveBars = this.moveBars.bind(this);
+    // this.moveBars = this.moveBars.bind(this);
     this.tempFunction = this.tempFunction.bind(this);
+    this.resetAllLeft = this.resetAllLeft.bind(this);
   }
 
   componentDidMount() {
     // this.calculateNumOfBars();
     // console.log("Mount ", this.state.numOfBars);
+    this.resetAllLeft();
   }
 
   componentDidUpdate(prevProps) {
@@ -40,7 +51,7 @@ class GraphDisplay extends React.Component {
     return <div key={keys}>{num}</div>;
   }
 
-  // Function to output user specified number of bars
+  // Calculates each bar height
   calculateNumOfBars(selectedNumOfBars) {
     // const selectedNumOfBars = this.state.numOfBars;
     const barHeightDiff = Math.round(100 / selectedNumOfBars);
@@ -49,15 +60,28 @@ class GraphDisplay extends React.Component {
       tempNumArray.push(i);
     }
     this.setState({ barNumArray: tempNumArray }, () => {
-      this.tempFunction();
+      this.resetAllLeft();
+      // Set timeout ensures all left has been reset
+      // preferably we an add show bars and animate so lengthen this process
+      setTimeout(() => {
+        this.tempFunction();
+      }, 100);
     });
   }
 
+  resetAllLeft() {
+    document.querySelector(".bar-graph-display").classList.add("no-transition");
+    const allBars = [...document.querySelectorAll(".single-bar")];
+    allBars.forEach(bar => {
+      bar.style.left = "0";
+    });
+  }
+
+  // Update the number of bars it needs everytime the state updates, which is when animate is clicked
   updateBars() {
     const selectedNumOfBars = this.state.numOfBars;
     const graph = document.querySelector("#graph-container .bar-graph-display");
     if (graph && selectedNumOfBars !== 0) {
-      // if (this.state.didSetState) {
       graph.style.gridTemplateColumns = `repeat(${selectedNumOfBars}, 1fr [bar-height-row])`;
       return this.state.barNumArray.map((bar, i) => {
         return <SingleBar barLength={bar} barNum={bar} key={i} />;
@@ -66,51 +90,46 @@ class GraphDisplay extends React.Component {
   }
 
   tempFunction() {
-    const temp = this.state.barNumArray[0];
-    let nextBarsArray = this.state.barNumArray;
-    const bar1 = this.state.barNumArray[0];
-    const bar2 = nextBarsArray[nextBarsArray.length - 1];
-    nextBarsArray[0] = nextBarsArray[nextBarsArray.length - 1];
-    nextBarsArray[nextBarsArray.length - 1] = temp;
+    document
+      .querySelector(".bar-graph-display")
+      .classList.remove("no-transition");
 
-    // this.moveBars(bar1, bar2);
+    let totalBars = this.state.barNumArray.length - 1;
+    let counter = 0;
+    let count = Math.floor(this.state.barNumArray.length / 2);
+    const numOfMoves = count;
+    let nextBarsArray = this.state.barNumArray;
+    // let bar1 = this.state.barNumArray[0];
+    // let bar2 = nextBarsArray[nextBarsArray.length - 1];
+    // nextBarsArray[0] = nextBarsArray[nextBarsArray.length - 1];
+    // nextBarsArray[nextBarsArray.length - 1] = temp;
+    const checkNextMove = () => {
+      count -= 1;
+      // let bar1 = this.state.barNumArray[0];
+      // let bar2 = nextBarsArray[nextBarsArray.length - 1];
+      let bar1 = this.state.barNumArray[counter];
+      let bar2 = nextBarsArray[totalBars];
+      console.log(bar1, bar2);
+      counter += 1;
+      totalBars -= 1;
+      return { bar1, bar2 };
+    };
+    const waitMoveBars = async () => {
+      let i = numOfMoves;
+
+      while (i > 0) {
+        const { bar1, bar2 } = checkNextMove();
+        const isDone = await moveBars(bar1, bar2);
+        i -= 1;
+      }
+      // const { bar1, bar2 } = checkNextMove();
+      // const isDone = await moveBars(bar1, bar2);
+    };
+
+    waitMoveBars();
   }
 
   // Function should take two input bar points to swap places
-  moveBars(bar1, bar2) {
-    const barContainerLeft = document.querySelector(".bar-graph-display")
-      .offsetLeft;
-    const bar1Elem = document.querySelector(`.bar-graph-display .bar-${bar1}`);
-    const bar2Elem = document.querySelector(`.bar-graph-display .bar-${bar2}`);
-
-    const oldBar1Left = bar1Elem.offsetLeft - barContainerLeft;
-    const oldBar2Left = bar2Elem.offsetLeft - barContainerLeft;
-
-    const newBar1Left = oldBar2Left - oldBar1Left;
-    const newBar2Left = oldBar1Left - oldBar2Left;
-
-    bar1Elem.classList.add(`bar-moving-${bar1}`);
-    document.querySelector(
-      `.bar-moving-${bar1}`
-    ).style.left = `${newBar1Left}px`;
-
-    bar2Elem.classList.add(`bar-moving-${bar2}`);
-    document.querySelector(
-      `.bar-moving-${bar2}`
-    ).style.left = `${newBar2Left}px`;
-
-    bar1Elem.addEventListener(
-      "transitionend",
-      () => {
-        bar1Elem.style.left = `${newBar1Left}px`;
-        bar2Elem.style.left = `${newBar2Left}px`;
-
-        bar1Elem.classList.remove(`bar-moving-${bar1}`);
-        bar2Elem.classList.remove(`bar-moving-${bar2}`);
-      },
-      false
-    );
-  }
 
   render() {
     return <div className="bar-graph-display">{this.updateBars()}</div>;

@@ -11,6 +11,8 @@
     grid-template-rows: repeat(100, 1fr [bar-height-row]);
     grid-gap: 0px 5px;
     height: 500px;
+    position: relative;
+
     .bars-list {
       // list-style: none;
       // padding-left: 0;
