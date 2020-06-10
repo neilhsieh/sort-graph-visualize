@@ -3,7 +3,9 @@
   box-sizing: border-box;
 
   .bar-graph-display {
-    border: solid 1px grey;
+    border: solid 1px black;
+    border-radius: 5px;
+    overflow: hidden;
     box-sizing: border-box;
     // height: 100%;
     display: grid;

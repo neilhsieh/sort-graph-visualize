@@ -1,7 +1,12 @@
 const moveBars = (bar1, bar2) => {
-  return new Promise((res, rej) => {
+  // console.log(bar1, bar2);
+  return new Promise((res) => {
     const bar1Elem = document.querySelector(`.bar-${bar1}`);
     const bar2Elem = document.querySelector(`.bar-${bar2}`);
+    if (!bar1Elem || !bar2Elem) {
+      console.warn(bar1, bar1Elem, bar2, bar2Elem);
+      return;
+    }
     const bar1Pos = bar1Elem.offsetLeft;
     const bar2Pos = bar2Elem.offsetLeft;
 
