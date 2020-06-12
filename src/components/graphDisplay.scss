@@ -9,7 +9,7 @@
     box-sizing: border-box;
     // height: 100%;
     display: grid;
-    grid-template-columns: repeat(10, 1fr [bar-col]);
+    // grid-template-columns: repeat(10, 1fr [bar-col]);
     grid-template-rows: repeat(100, 1fr [bar-height-row]);
     grid-gap: 0px 5px;
     height: 500px;

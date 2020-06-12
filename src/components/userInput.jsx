@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import "./userInput.scss";
 import CreateButton from "./createButton.jsx";
 import { useContainer } from "unstated-next";
-import { NumberOfBars } from "../containers/numOfBars.container";
+import { NumberOfBars } from "../containers/userInput.container";
 
 export const UserInput = ({ clickHandler }) => {
   // const [numOfBars, updateNumOfBars] = useState(0);
@@ -12,21 +12,23 @@ export const UserInput = ({ clickHandler }) => {
   const [barsNumToggle, updateBarsNumToggle] = useState(false);
   const [algoToggle, updateAlgoToggle] = useState(false);
 
-  const { numberOfBars, updateNumberOfBars } = NumberOfBars.useContainer();
+  const {
+    updateNumberOfBars,
+    updateAlgo,
+    updateAnimate,
+  } = NumberOfBars.useContainer();
 
   const updateButton = (e) => {
     const dataType = e.target.getAttribute("data-type");
-    console.log("update button");
 
     if (dataType === "number") {
       barsNumDrop();
       updateNumberOfBars(parseInt(e.target.value));
-      // return clickHandler(parseInt(e.target.value));
     } else if (dataType === "algo") {
       algoDropdownToggle();
-      return clickHandler(e.target.value);
+      updateAlgo(e.target.value);
     } else if (dataType === "boolean") {
-      return clickHandler(true);
+      updateAnimate(true);
     }
   };
 

@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import SingleBar from "./singleBar.jsx";
 import MoveBars from "./moveBars.jsx";
 import "./graphDisplay.scss";
 import moveBars from "./moveBars.js";
+import { NumberOfBars } from "../containers/userInput.container.js";
 
 // function resolveAfter2Seconds() {
 //   return new Promise((resolve) => {
@@ -16,13 +17,52 @@ import moveBars from "./moveBars.js";
 export const GraphDisplay = () => {
   const [didSetState, updateDidSetState] = useState(false);
   const [barNumArray, udpateBarNumArray] = useState([]);
-  const [numOfBars, updateNumOfBars] = useState(0);
+  // const [numOfBars, updateNumOfBars] = useState(0);
   const [bar1ToMove, updateBar1ToMove] = useState(0);
   const [bar2ToMove, updateBar2ToMove] = useState(0);
   const [animateNow, updateAnimateNow] = useState(false);
   const [numsReady, updateNumsReady] = useState(false);
 
-  return <div></div>;
+  const { numberOfBars } = NumberOfBars.useContainer();
+
+  useEffect(() => {
+    console.log("number of bars updated");
+
+    setBars(numberOfBars);
+  }, [numberOfBars]);
+
+  const shuffleArray = (array) => {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+  };
+
+  const setBars = (barNum) => {
+    const barHeightDiff = Math.round(100 / barNum);
+
+    let tempNumArray = [];
+    for (let i = 0; i < barNum; i++) {
+      tempNumArray.push(barHeightDiff * (i + 1));
+    }
+    shuffleArray(tempNumArray);
+
+    udpateBarNumArray(tempNumArray);
+  };
+
+  return (
+    <div className="bar-graph-display">
+      {barNumArray === [] ? (
+        <div className="graph-loading-text">Select bars</div>
+      ) : (
+        <>
+          {barNumArray.map((bar, i) => {
+            return <SingleBar barLength={bar} barNum={bar} key={i} />;
+          })}
+        </>
+      )}
+    </div>
+  );
 };
 
 // class GraphDisplay extends React.Component {

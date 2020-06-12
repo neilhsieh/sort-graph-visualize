@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import "./index.scss";
 import { App } from "./App.jsx";
 import * as serviceWorker from "./serviceWorker";
-import { NumberOfBars } from "./containers/numOfBars.container";
+import { NumberOfBars } from "./containers/userInput.container";
 
 ReactDOM.render(
   <NumberOfBars.Provider>
