@@ -4,8 +4,15 @@
 // console.log("Sort", testRand)
 let numSteps = 0;
 
-const quickSort = (array) => {
-  const partition = (lo, hi, arr) => {
+const quickSort = async (array, func) => {
+  const arrOfDOMBars = [...array];
+  const arrOfBarsVal = arrOfDOMBars.map((bar) => {
+    return parseInt(bar.getAttribute("data-value"));
+  });
+
+  console.log(arrOfBarsVal);
+
+  const partition = async (lo, hi, arr) => {
     const pivotInd = hi;
     let loCheckInd = lo;
     let hiCheckInd = pivotInd - 1;
@@ -24,9 +31,14 @@ const quickSort = (array) => {
           if (arr[hiCheckInd] >= arr[pivotInd]) {
             hiCheckInd -= 1;
           } else {
+            // console.log(arr[hiCheckInd]);
+            console.log("switch");
+            // await func(arr[hiCheckInd], arr[loCheckInd]);
+
             const tempHolder = arr[hiCheckInd];
             arr[hiCheckInd] = arr[loCheckInd];
             arr[loCheckInd] = tempHolder;
+
             loCheckInd += 1;
             hiCheckInd -= 1;
           }
@@ -35,11 +47,19 @@ const quickSort = (array) => {
       let newPiv;
 
       if (arr[hiCheckInd] < arr[pivotInd]) {
+        console.log("switch 2");
+
+        // await func(arr[hiCheckInd + 1], arr[pivotInd]);
+
         const tempHolder = arr[hiCheckInd + 1];
         arr[hiCheckInd + 1] = arr[pivotInd];
         arr[pivotInd] = tempHolder;
         newPiv = hiCheckInd + 1;
       } else {
+        console.log("switch 3");
+
+        // await func(arr[hiCheckInd], arr[pivotInd]);
+
         const tempHolder = arr[hiCheckInd];
         arr[hiCheckInd] = arr[pivotInd];
         arr[pivotInd] = tempHolder;
@@ -53,14 +73,14 @@ const quickSort = (array) => {
       let joinedArr;
 
       if (leftArr.length === 0 && rightArr.length >= 1) {
-        newRightPart = partition(0, rightArr.length - 1, rightArr);
+        newRightPart = await partition(0, rightArr.length - 1, rightArr);
         joinedArr = [...[arr[newPiv]], ...newRightPart];
       } else if (leftArr.length >= 1 && rightArr.length === 0) {
-        newLeftPart = partition(0, leftArr.length - 1, leftArr);
+        newLeftPart = await partition(0, leftArr.length - 1, leftArr);
         joinedArr = [...newLeftPart, ...[arr[newPiv]]];
       } else {
-        newLeftPart = partition(0, leftArr.length - 1, leftArr);
-        newRightPart = partition(0, rightArr.length - 1, rightArr);
+        newLeftPart = await partition(0, leftArr.length - 1, leftArr);
+        newRightPart = await partition(0, rightArr.length - 1, rightArr);
         joinedArr = [...newLeftPart, ...[arr[newPiv]], ...newRightPart];
       }
       return joinedArr;
@@ -68,17 +88,10 @@ const quickSort = (array) => {
       return arr;
     }
   };
-
-  const sorted = partition(0, array.length - 1, array);
-  console.log("final", numSteps, sorted);
-  let defaultSortNum = 0;
-  array.sort((a, b) => {
-    defaultSortNum += 1;
-    return a - b;
-  });
-  console.log(defaultSortNum);
+  const initBars = [...arrOfBarsVal];
+  console.log(initBars);
+  const final = await partition(0, arrOfBarsVal.length - 1, arrOfBarsVal);
+  console.log(final);
 };
-
-// quickSort();
 
 export { quickSort };

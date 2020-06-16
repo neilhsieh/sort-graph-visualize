@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import PropTypes from "prop-types";
 import SingleBar from "./singleBar.jsx";
-import MoveBars from "./moveBars.jsx";
-import "./graphDisplay.scss";
 import moveBars from "./moveBars.js";
+import "./graphDisplay.scss";
+// import moveBars from "./moveBars.js";
 import { NumberOfBars } from "../containers/userInput.container.js";
+import { quickSort } from "../libs/algorithms/quickSort.js";
 
 // function resolveAfter2Seconds() {
 //   return new Promise((resolve) => {
@@ -17,21 +18,100 @@ import { NumberOfBars } from "../containers/userInput.container.js";
 export const GraphDisplay = () => {
   const [didSetState, updateDidSetState] = useState(false);
   const [barNumArray, udpateBarNumArray] = useState([]);
+  const [barsArray, updateBarsArray] = useState([]);
   // const [numOfBars, updateNumOfBars] = useState(0);
   const [bar1ToMove, updateBar1ToMove] = useState(0);
   const [bar2ToMove, updateBar2ToMove] = useState(0);
   const [animateNow, updateAnimateNow] = useState(false);
   const [numsReady, updateNumsReady] = useState(false);
 
-  const { numberOfBars } = NumberOfBars.useContainer();
+  const { numberOfBars, animate } = NumberOfBars.useContainer();
 
+  /* Listeing to Number of Bars button click */
   useEffect(() => {
-    console.log("number of bars updated");
-
     setBars(numberOfBars);
   }, [numberOfBars]);
 
-  const shuffleArray = (array) => {
+  useEffect(() => {
+    setArrayOfBars();
+    console.log("update");
+  }, [barNumArray]);
+
+  /* --- Listening to Animate Button Click --- */
+  useEffect(() => {
+    console.log("animate btn clicked");
+    /* 
+    1. Grab all bars and set array of document query selectors
+    2. Move them
+    */
+    // setArrayOfBars();
+    animateBars();
+  }, [animate]);
+
+  // const tempFunction = () => {
+  //   document
+  //     .querySelector(".bar-graph-display")
+  //     .classList.remove("no-transition");
+
+  //   let totalBars = this.state.barNumArray.length - 1;
+  //   let counter = 0;
+  //   let count = Math.floor(this.state.barNumArray.length / 2);
+  //   const numOfMoves = count;
+  //   const nextBarsArray = this.state.barNumArray;
+  //   // console.log("next bars array", nextBarsArray);
+
+  //   const checkNextMove = (barArray) => {
+  //     const barArr = barArray;
+  //     count -= 1;
+  //     let bar1 = barArr[counter];
+  //     let bar2 = barArr[totalBars];
+  //     counter += 1;
+  //     totalBars -= 1;
+  //     // console.log(nextBarsArray, bar1, bar2);
+
+  //     return { bar1, bar2 };
+  //   };
+  //   // if (this.props.animateNow) {
+  //   const waitMoveBars = async (nextBarsArray) => {
+  //     const barArray = nextBarsArray;
+  //     let i = numOfMoves;
+  //     console.log("START WAIT MOVE BAR");
+  //     while (i > 0) {
+  //       console.log("WHILE", barArray.length);
+
+  //       const { bar1, bar2 } = checkNextMove(barArray);
+  //       console.log("in wait", bar1, bar2);
+  //       await moveBars(bar1, bar2);
+  //       i -= 1;
+  //     }
+  //   };
+
+  //   waitMoveBars(nextBarsArray);
+  //   // }
+  // };
+
+  const animateBars = async () => {
+    document
+      .querySelector(".bar-graph-display")
+      .classList.remove("no-transition");
+    // const first = barsArray[0];
+    // const second = barsArray[barsArray.length - 1];
+
+    // moveBars(first, second);
+
+    quickSort(barsArray, moveBars);
+  };
+
+  const setArrayOfBars = () => {
+    const tempArray = [
+      ...document.querySelectorAll(".single-bars-container > .single-bar"),
+    ].map((bar) => {
+      return bar;
+    });
+    updateBarsArray(tempArray);
+  };
+
+  const randomizeArray = (array) => {
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [array[i], array[j]] = [array[j], array[i]];
@@ -45,8 +125,7 @@ export const GraphDisplay = () => {
     for (let i = 0; i < barNum; i++) {
       tempNumArray.push(barHeightDiff * (i + 1));
     }
-    shuffleArray(tempNumArray);
-
+    randomizeArray(tempNumArray);
     udpateBarNumArray(tempNumArray);
   };
 
@@ -55,11 +134,11 @@ export const GraphDisplay = () => {
       {barNumArray === [] ? (
         <div className="graph-loading-text">Select bars</div>
       ) : (
-        <>
+        <div className="single-bars-container">
           {barNumArray.map((bar, i) => {
             return <SingleBar barLength={bar} barNum={bar} key={i} />;
           })}
-        </>
+        </div>
       )}
     </div>
   );
