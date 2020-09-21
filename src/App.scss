@@ -1,22 +1,33 @@
-.App {
-  text-align: center;
+// @import "./alignment.scss";
+
+.app {
+  font-size: 1.6rem;
 }
 
-.App-logo {
-  height: 40vmin;
+/* ---------- Page Alignment ---------- */
+body {
+  #graph-container,
+  .sort-visualizer-header,
+  #user-input {
+    margin: 0px 10px;
+  }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
+// .App-logo {
+//   height: 40vmin;
+// }
 
-.App-link {
-  color: #09d3ac;
-}
+// .App-header {
+//   background-color: #282c34;
+//   min-height: 100vh;
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+//   justify-content: center;
+//   font-size: calc(10px + 2vmin);
+//   color: white;
+// }
+
+// .App-link {
+//   color: #09d3ac;
+// }
