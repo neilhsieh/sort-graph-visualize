@@ -1,8 +1,8 @@
 .bar-graph-display {
   .single-bar {
     position: relative;
-    background-color: #9dbad5;
     opacity: 0.6;
+    background-color: transparent;
     box-sizing: border-box;
     justify-self: center;
     width: 100%;
@@ -11,11 +11,25 @@
     grid-gap: 2px;
     text-align: center;
     left: 0;
-    transition: left 300ms ease-out;
+    transition: left 400ms ease-out;
+    border: 1px solid #444;
+
+    &.active-bar {
+      background-color: #9dbad5;
+    }
+
+    &.pivot {
+      background-color: green;
+    }
+    &[class*="bar-moving"] {
+      background-color: red;
+      z-index: 100;
+      &.pivot {
+        background: linear-gradient(green, red);
+      }
+    }
   }
-  [class*="bar-moving"] {
-    background-color: red;
-  }
+
   &.no-transition {
     .single-bar {
       transition: none !important;

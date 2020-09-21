@@ -2,12 +2,15 @@
   max-height: 100vh;
   box-sizing: border-box;
 
-  .bar-graph-display {
-    border: solid 1px grey;
+  // .bar-graph-display
+  .single-bars-container {
+    border: solid 1px black;
+    border-radius: 5px;
+    overflow: hidden;
     box-sizing: border-box;
     // height: 100%;
     display: grid;
-    grid-template-columns: repeat(10, 1fr [bar-col]);
+    // grid-template-columns: repeat(10, 1fr [bar-col]);
     grid-template-rows: repeat(100, 1fr [bar-height-row]);
     grid-gap: 0px 5px;
     height: 500px;

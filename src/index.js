@@ -1,10 +1,16 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.scss";
-import App from "./App.jsx";
+import { App } from "./App.jsx";
 import * as serviceWorker from "./serviceWorker";
-
-ReactDOM.render(<App />, document.getElementById("root"));
+import { NumberOfBars } from "./containers/userInput.container";
+window.testNextBool = false;
+ReactDOM.render(
+  <NumberOfBars.Provider>
+    <App />
+  </NumberOfBars.Provider>,
+  document.getElementById("root")
+);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
