@@ -16,6 +16,8 @@ export const UserInput = ({ clickHandler }) => {
     updateNumberOfBars,
     updateAlgo,
     updateAnimate,
+    testNext,
+    updateTestNext,
   } = NumberOfBars.useContainer();
 
   const updateButton = (e) => {
@@ -113,6 +115,15 @@ export const UserInput = ({ clickHandler }) => {
           updateButton={updateButton}
         />
       </div>
+      {/* Test button */}
+      {/* <button
+        onClick={() => {
+          window.testNextBool = !testNext;
+          updateTestNext(!testNext);
+        }}
+      >
+        Next Move
+      </button> */}
     </div>
   );
 };

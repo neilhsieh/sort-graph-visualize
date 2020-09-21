@@ -4,7 +4,7 @@ import "./index.scss";
 import { App } from "./App.jsx";
 import * as serviceWorker from "./serviceWorker";
 import { NumberOfBars } from "./containers/userInput.container";
-
+window.testNextBool = false;
 ReactDOM.render(
   <NumberOfBars.Provider>
     <App />

@@ -6,12 +6,19 @@ export const NumberOfBars = createContainer(() => {
   const [algo, updateAlgo] = useState();
   const [animate, updateAnimate] = useState(false);
 
+  const [testNext, updateTestNext] = useState(false);
+
+  // const changeWindow = () => {
+  //   window.testNextBool = testNext;
+  // }
   return {
     numberOfBars,
     algo,
     animate,
+    testNext,
     updateNumberOfBars,
     updateAlgo,
     updateAnimate,
+    updateTestNext,
   };
 });
